@@ -1,0 +1,83 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\SID9RS\\game-hub-widget\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\SID9RS\\game-hub-widget\\src\\routes\\\u002Bpage.svelte||{91B34873-62FF-42E3-9664-A518B922478F}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\routes\\\u002Bpage.svelte||{91B34873-62FF-42E3-9664-A518B922478F}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\SID9RS\\game-hub-widget\\src-tauri\\Cargo.toml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src-tauri\\Cargo.toml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\SID9RS\\game-hub-widget\\src-tauri\\src\\main.rs||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src-tauri\\src\\main.rs||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\SID9RS\\game-hub-widget\\src\\input.css||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\input.css||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "main.rs",
+              "DocumentMoniker": "C:\\Users\\SID9RS\\game-hub-widget\\src-tauri\\src\\main.rs",
+              "RelativeDocumentMoniker": "src-tauri\\src\\main.rs",
+              "ToolTip": "C:\\Users\\SID9RS\\game-hub-widget\\src-tauri\\src\\main.rs",
+              "RelativeToolTip": "src-tauri\\src\\main.rs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAQwFYAAAABAAAAAAAAAA==",
+              "Icon": "c622248c-8545-475a-99b2-201af73752bd.000001|",
+              "WhenOpened": "2025-11-30T12:18:27.855Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Cargo.toml",
+              "DocumentMoniker": "C:\\Users\\SID9RS\\game-hub-widget\\src-tauri\\Cargo.toml",
+              "RelativeDocumentMoniker": "src-tauri\\Cargo.toml",
+              "ToolTip": "C:\\Users\\SID9RS\\game-hub-widget\\src-tauri\\Cargo.toml",
+              "RelativeToolTip": "src-tauri\\Cargo.toml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAOAAAAAAAAAA==",
+              "Icon": "c622248c-8545-475a-99b2-201af73752bd.000002|",
+              "WhenOpened": "2025-11-30T12:18:03.872Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "\u002Bpage.svelte",
+              "DocumentMoniker": "C:\\Users\\SID9RS\\game-hub-widget\\src\\routes\\\u002Bpage.svelte",
+              "RelativeDocumentMoniker": "src\\routes\\\u002Bpage.svelte",
+              "ToolTip": "C:\\Users\\SID9RS\\game-hub-widget\\src\\routes\\\u002Bpage.svelte",
+              "RelativeToolTip": "src\\routes\\\u002Bpage.svelte",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-30T12:10:21.16Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "input.css",
+              "DocumentMoniker": "C:\\Users\\SID9RS\\game-hub-widget\\src\\input.css",
+              "RelativeDocumentMoniker": "src\\input.css",
+              "ToolTip": "C:\\Users\\SID9RS\\game-hub-widget\\src\\input.css",
+              "RelativeToolTip": "src\\input.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-11-30T12:08:54.81Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
