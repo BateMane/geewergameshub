@@ -24,13 +24,39 @@ struct Game {
     is_favorite: bool,
 }
 
+// NOUVEAU : Configuration complète du thème
+#[derive(Serialize, Deserialize, Clone, Debug)]
+struct ThemeConfig {
+    accent: String,       // Couleur principale (boutons, favoris)
+    bg_from: String,      // Dégradé fond haut
+    bg_to: String,        // Dégradé fond bas
+    card_bg: String,      // Couleur de fond des cartes
+    text_primary: String, // Couleur du texte principal
+}
+
+// Valeurs par défaut (Thème sombre standard)
+impl Default for ThemeConfig {
+    fn default() -> Self {
+        Self {
+            accent: "#5865F2".to_string(),     // Discord Blurple
+            bg_from: "#121212".to_string(),    // Dark Grey
+            bg_to: "#0a0a0a".to_string(),      // Black
+            card_bg: "#1e1e1e".to_string(),    // Card Grey
+            text_primary: "#f3f4f6".to_string(), // White/Gray
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Default, Clone)]
 struct UserData {
     favorites: HashSet<String>,
     custom_games: Vec<Game>,
-
-    accent_color: String,  // Ex: #5865F2 (la couleur d'accentuation)
-    selected_drives: HashSet<String>, // Ex: {"C:\\", "D:\\"}
+    selected_drives: HashSet<String>,
+    
+    // On utilise #[serde(default)] pour que les anciens fichiers de config 
+    // (qui n'ont pas encore 'theme') chargent les valeurs par défaut sans planter.
+    #[serde(default)] 
+    theme: ThemeConfig, 
 }
 
 #[derive(Serialize, Clone, Default)]
@@ -56,7 +82,8 @@ struct AppState {
 fn load_data(path: &Path) -> UserData {
     if path.exists() {
         if let Ok(content) = fs::read_to_string(path) {
-            if let Ok(data) = serde_json::from_str(&content) {
+            // On tente de charger. Si le champ 'theme' manque, serde utilise Default::default() grâce à l'attribut.
+            if let Ok(data) = serde_json::from_str::<UserData>(&content) {
                 return data;
             }
         }
@@ -72,7 +99,6 @@ fn save_data(path: &Path, data: &UserData) {
 
 // ===================== 2. OUTILS WEB & FICHIERS =====================
 
-// Scavenger : Cherche image locale
 fn scavenge_image(install_dir: &str) -> String {
     let path = Path::new(install_dir);
     if install_dir.is_empty() || !path.exists() { return "".to_string(); }
@@ -130,11 +156,8 @@ fn get_steam_details(steam_id: String) -> String {
     "{}".to_string()
 }
 
-// --- HOW LONG TO BEAT (VERSION NINJA VIA DUCKDUCKGO) ---
 #[tauri::command]
 fn get_hltb(title: String) -> HltbTime {
-    println!("🥷 HLTB Ninja : Recherche pour '{}'", title);
-
     let clean_title = title
         .to_lowercase()
         .replace("goty", "")
@@ -146,7 +169,6 @@ fn get_hltb(title: String) -> HltbTime {
         .trim()
         .to_string();
 
-    // On interroge la version HTML légère de DuckDuckGo pour éviter les scripts lourds
     let url = "https://html.duckduckgo.com/html/";
     let query = format!("site:howlongtobeat.com {}", clean_title);
     
@@ -162,11 +184,9 @@ fn get_hltb(title: String) -> HltbTime {
     match response {
         Ok(resp) => {
             if let Ok(html) = resp.into_string() {
-                // Analyse du texte HTML avec Regex pour trouver "Main Story 15 Hours" etc.
                 let mut time = HltbTime::default();
                 let mut found = false;
 
-                // Regex flexibles pour capturer les heures
                 if let Ok(re_main) = Regex::new(r"(?i)Main Story\s*[-:]?\s*(\d+)") {
                     if let Some(caps) = re_main.captures(&html) {
                         if let Some(m) = caps.get(1) {
@@ -193,22 +213,16 @@ fn get_hltb(title: String) -> HltbTime {
                 }
 
                 if found {
-                    println!("🎉 HLTB Ninja : Trouvé ! {}h / {}h / {}h", time.main, time.main_extra, time.completionist);
                     return time;
-                } else {
-                    println!("❌ HLTB Ninja : Rien trouvé dans les résultats DDG.");
                 }
             }
         },
-        Err(e) => {
-            println!("🔥 HLTB Ninja Erreur : {}", e);
-        }
+        Err(_) => {}
     }
     
     HltbTime::default()
 }
 
-// --- MOD SUPPORT CHECKER ---
 #[tauri::command]
 fn check_mod_support(title: String) -> ModInfo {
     let mut info = ModInfo::default();
@@ -231,17 +245,38 @@ fn check_mod_support(title: String) -> ModInfo {
         }
     }
 
-    // 2. Nexus Mods (Guessing)
-    let slug = title.to_lowercase().replace(":", "").replace("'", "").replace("-", "").replace(" ", "").replace("™", "").replace("®", "");
+    // 2. Nexus Mods (FIXED & ROBUST)
+    let slug = title.to_lowercase()
+        .replace(":", "").replace("'", "").replace("-", "")
+        .replace(" ", "").replace("™", "").replace("®", "").replace(".", "");
+        
     let nexus_url = format!("https://www.nexusmods.com/{}", slug);
     
-    let agent = ureq::AgentBuilder::new().timeout(std::time::Duration::from_secs(2)).build();
-    let resp = agent.head(&nexus_url)
-        .set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0 Safari/537.36")
+    // On se fait passer pour un vrai navigateur Chrome Windows pour éviter les blocages
+    let agent = ureq::AgentBuilder::new()
+        .timeout(std::time::Duration::from_secs(5))
+        .redirects(10)
+        .build();
+
+    let resp = agent.get(&nexus_url)
+        .set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
         .call();
 
-    if let Ok(r) = resp {
-        if r.status() == 200 {
+    match resp {
+        Ok(r) => {
+            // Si le site répond 200 OK, c'est bon
+            if r.status() == 200 {
+                info.nexus = Some(nexus_url);
+            }
+        },
+        Err(ureq::Error::Status(404, _)) => {
+            // Si c'est une vraie 404, le jeu n'existe pas sur Nexus -> Pas de bouton
+            info.nexus = None;
+        },
+        Err(_) => {
+            // Pour TOUTE autre erreur (Timeout, Réseau, 429 Too Many Requests...)
+            // On affiche le bouton de manière OPTIMISTE.
+            // Cela règle le problème "une fois sur deux" : si ça lag, le bouton sera là quand même.
             info.nexus = Some(nexus_url);
         }
     }
@@ -282,7 +317,6 @@ fn get_steam_library_folders(steam_root: &Path) -> Vec<PathBuf> {
 
 fn get_steam_games() -> Vec<Game> {
     let mut games = Vec::new();
-    println!("Scanning Steam...");
     
     let hkcu = RegKey::predef(HKEY_CURRENT_USER);
     if let Ok(steam_key) = hkcu.open_subkey("Software\\Valve\\Steam") {
@@ -307,9 +341,11 @@ fn get_steam_games() -> Vec<Game> {
                                     let cover = library_cache.join(format!("{}_library_600x900.jpg", id));
                                     let img = if cover.exists() { cover.to_string_lossy().to_string() } else { "".to_string() };
 
+                                    let install_dir = lib_path.to_string_lossy().to_string();
+
                                     games.push(Game { 
                                         id, title, platform: "Steam".to_string(), 
-                                        image_path: img, exe_path: "".to_string(), install_dir: "".to_string(),
+                                        image_path: img, exe_path: "".to_string(), install_dir,
                                         is_favorite: false
                                     });
                                 }
@@ -325,7 +361,6 @@ fn get_steam_games() -> Vec<Game> {
 
 fn get_gog_games() -> Vec<Game> {
     let mut games = Vec::new();
-    println!("Scanning GOG...");
     let hklm = RegKey::predef(HKEY_LOCAL_MACHINE);
     let keys = ["SOFTWARE\\GOG.com\\Games", "SOFTWARE\\WOW6432Node\\GOG.com\\Games"];
 
@@ -355,7 +390,6 @@ fn get_gog_games() -> Vec<Game> {
 
 fn get_epic_games() -> Vec<Game> {
     let mut games = Vec::new();
-    println!("Scanning Epic...");
     let manifest_path = Path::new("C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests");
     if manifest_path.exists() {
         if let Ok(entries) = fs::read_dir(manifest_path) {
@@ -383,7 +417,6 @@ fn get_epic_games() -> Vec<Game> {
 
 fn get_ea_and_ubi_games() -> Vec<Game> {
     let mut games = Vec::new();
-    println!("Scanning EA & Ubisoft...");
     let hklm = RegKey::predef(HKEY_LOCAL_MACHINE);
     let uninstall_paths = [
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
@@ -463,20 +496,80 @@ fn toggle_favorite(game_id: String, platform: String, state: State<AppState>) ->
 }
 
 #[tauri::command]
+fn get_system_drives() -> Vec<String> {
+    let mut drives = Vec::new();
+    if cfg!(windows) {
+        for drive in ('A'..='Z').map(|c| format!("{}:\\", c)) {
+            let path = PathBuf::from(&drive);
+            if path.exists() {
+                drives.push(drive);
+            }
+        }
+    } else {
+        drives.push("/".to_string()); 
+    }
+    drives
+}
+
+// --- NOUVEAU: Sauvegarder les paramètres complets (Theme + Disques) ---
+#[tauri::command]
+fn update_settings(theme: ThemeConfig, selected_drives: Vec<String>, state: State<AppState>) -> Result<(), String> {
+    let mut data = state.data.lock().map_err(|_| "Lock error")?;
+    data.theme = theme;
+    data.selected_drives = selected_drives.into_iter().collect();
+    save_data(&state.data_path, &data);
+    Ok(())
+}
+
+#[tauri::command]
+fn get_settings(state: State<AppState>) -> Result<UserData, String> {
+    let data = state.data.lock().map_err(|_| "Lock error")?;
+    Ok(data.clone())
+}
+
+#[tauri::command]
 fn get_games(state: State<AppState>) -> Vec<Game> {
-    let mut all_games = Vec::new();
-    all_games.extend(get_steam_games());
-    all_games.extend(get_epic_games());
-    all_games.extend(get_gog_games());
-    all_games.extend(get_ea_and_ubi_games());
+    let mut all_scanned_games = Vec::new();
+    
+    // 1. On récupère tout
+    all_scanned_games.extend(get_steam_games());
+    all_scanned_games.extend(get_epic_games());
+    all_scanned_games.extend(get_gog_games());
+    all_scanned_games.extend(get_ea_and_ubi_games());
 
     let data = state.data.lock().unwrap();
-    all_games.extend(data.custom_games.clone());
+    
+    // 2. On filtre selon les disques sélectionnés
+    let mut filtered_games = Vec::new();
+    let use_filter = !data.selected_drives.is_empty();
+    
+    for game in all_scanned_games {
+        if use_filter {
+            // FIX: On remplace tous les / par des \ pour normaliser la comparaison
+            // Cela règle le problème des jeux Ubisoft qui utilisent souvent des "/"
+            let game_drive_norm = game.install_dir.to_lowercase().replace("/", "\\");
+            
+            let match_found = data.selected_drives.iter().any(|d| {
+                let selected_drive_norm = d.to_lowercase().replace("/", "\\");
+                game_drive_norm.starts_with(&selected_drive_norm)
+            });
+            
+            if !match_found && !game.install_dir.is_empty() {
+                // Si le jeu n'est pas sur le disque sélectionné, on l'ignore
+                continue; 
+            }
+        }
+        filtered_games.push(game);
+    }
 
+    // 3. On ajoute les jeux Custom (qui ne sont pas filtrés par disque pour éviter de les perdre)
+    filtered_games.extend(data.custom_games.clone());
+
+    // 4. Gestion des favoris et dédoublonnage
     let mut unique_games = Vec::new();
     let mut seen_ids = HashSet::new();
 
-    for mut game in all_games {
+    for mut game in filtered_games {
         let unique_key = format!("{}-{}", game.platform, game.id);
         if data.favorites.contains(&unique_key) {
             game.is_favorite = true;
@@ -488,7 +581,7 @@ fn get_games(state: State<AppState>) -> Vec<Game> {
     }
 
     unique_games.sort_by(|a, b| a.title.to_lowercase().cmp(&b.title.to_lowercase()));
-    println!("Total jeux uniques : {}", unique_games.len());
+    // println!("Total jeux uniques : {}", unique_games.len()); // Optionnel pour debug
     unique_games
 }
 
@@ -551,7 +644,11 @@ fn main() {
             toggle_favorite,
             add_custom_game,
             get_hltb,
-            check_mod_support
+            check_mod_support,
+            // COMMANDES MISES À JOUR
+            get_system_drives,
+            update_settings,
+            get_settings
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
