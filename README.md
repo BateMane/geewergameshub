@@ -1,4 +1,4 @@
-# Geewer Game's Hub
+# Geewer Game's Hub 1.0.1
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 ![Tauri](https://img.shields.io/badge/Tauri-2.0-orange?style=flat-square&logo=tauri)
