@@ -4,7 +4,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::collections::HashSet;
 use std::sync::Mutex;
-use tauri::State;
+use tauri::{State, Manager}; // AJOUT: Manager est nécessaire pour accéder aux paths dans le setup
 use winreg::enums::*;
 use winreg::RegKey;
 use serde::{Serialize, Deserialize};
@@ -24,7 +24,7 @@ struct Game {
     is_favorite: bool,
 }
 
-// NOUVEAU : Configuration complète du thème
+// Configuration complète du thème
 #[derive(Serialize, Deserialize, Clone, Debug)]
 struct ThemeConfig {
     accent: String,       // Couleur principale (boutons, favoris)
@@ -92,6 +92,12 @@ fn load_data(path: &Path) -> UserData {
 }
 
 fn save_data(path: &Path, data: &UserData) {
+    // MODIF IMPORTANTE : On crée le dossier parent s'il n'existe pas
+    // C'est crucial pour le premier lancement dans AppData
+    if let Some(parent) = path.parent() {
+        let _ = fs::create_dir_all(parent);
+    }
+
     if let Ok(json) = serde_json::to_string_pretty(data) {
         let _ = fs::write(path, json);
     }
@@ -146,8 +152,10 @@ fn find_image_online(title: String) -> String {
 }
 
 #[tauri::command]
-fn get_steam_details(steam_id: String) -> String {
-    let url = format!("https://store.steampowered.com/api/appdetails?appids={}&l=french", steam_id);
+fn get_steam_details(steam_id: String, language: String) -> String {
+    // On utilise le paramètre 'language' reçu du frontend
+    let url = format!("https://store.steampowered.com/api/appdetails?appids={}&l={}", steam_id, language);
+    
     if let Ok(response) = ureq::get(&url).call() {
         if let Ok(json_str) = response.into_string() {
             return json_str; 
@@ -511,7 +519,7 @@ fn get_system_drives() -> Vec<String> {
     drives
 }
 
-// --- NOUVEAU: Sauvegarder les paramètres complets (Theme + Disques) ---
+// Sauvegarder les paramètres complets (Theme + Disques)
 #[tauri::command]
 fn update_settings(theme: ThemeConfig, selected_drives: Vec<String>, state: State<AppState>) -> Result<(), String> {
     let mut data = state.data.lock().map_err(|_| "Lock error")?;
@@ -581,7 +589,6 @@ fn get_games(state: State<AppState>) -> Vec<Game> {
     }
 
     unique_games.sort_by(|a, b| a.title.to_lowercase().cmp(&b.title.to_lowercase()));
-    // println!("Total jeux uniques : {}", unique_games.len()); // Optionnel pour debug
     unique_games
 }
 
@@ -626,14 +633,32 @@ fn open_launcher_page(id: String, platform: String) {
 }
 
 fn main() {
-    let app_data_dir = std::env::current_exe().unwrap().parent().unwrap().join("geewers_data.json");
-    let initial_data = load_data(&app_data_dir);
-
     tauri::Builder::default()
+        // Plugins initiaux
+        .plugin(tauri_plugin_fs::init()) // Nécessaire pour la gestion de fichiers
         .plugin(tauri_plugin_dialog::init())
-        .manage(AppState {
-            data_path: app_data_dir,
-            data: Mutex::new(initial_data),
+        // Initialisation de l'Autostart
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            Some(vec![]),
+        ))
+        // Setup : C'est ici qu'on gère le state et le path AppData
+        .setup(|app| {
+            // On récupère le chemin standard "Local AppData"
+            // ex: C:\Users\Nom\AppData\Local\com.geewer.gamehub\
+            let app_data_dir = app.path().app_local_data_dir().expect("Impossible de trouver le dossier AppData");
+            let data_path = app_data_dir.join("geewers_data.json");
+
+            // Chargement des données existantes
+            let initial_data = load_data(&data_path);
+
+            // Injection du state dans l'app
+            app.manage(AppState {
+                data_path,
+                data: Mutex::new(initial_data),
+            });
+
+            Ok(())
         })
         .invoke_handler(tauri::generate_handler![
             get_games, 
@@ -645,7 +670,6 @@ fn main() {
             add_custom_game,
             get_hltb,
             check_mod_support,
-            // COMMANDES MISES À JOUR
             get_system_drives,
             update_settings,
             get_settings
