@@ -11,6 +11,9 @@
   // Imports Traduction
   import { _, locale } from 'svelte-i18n';
 
+  // Imports Publicité (Sponsor)
+  import AdBanner from '$lib/AdBanner.svelte';
+
   // --- ÉTAT GLOBAL ---
   let games = [];
   let selectedPlatform = 'all'; 
@@ -36,6 +39,20 @@
       card_bg: '#1e1e1e',
       text_primary: '#f3f4f6'
   };
+
+  // --- DETECTION THEME CLAIR/SOMBRE ---
+  function isColorDark(hexColor) {
+      if (!hexColor) return true;
+      const c = hexColor.substring(1);
+      const rgb = parseInt(c, 16);
+      const r = (rgb >> 16) & 0xff;
+      const g = (rgb >>  8) & 0xff;
+      const b = (rgb >>  0) & 0xff;
+      const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; 
+      return luma < 128; 
+  }
+
+  $: isAppDark = isColorDark(currentTheme.bg_from);
 
   const themes = [
     { name: 'Discord Dark', accent: '#5865F2', bg_from: '#202225', bg_to: '#2f3136', card_bg: '#36393f', text_primary: '#dcddde' },
@@ -141,13 +158,11 @@
         if (games[i].platform !== 'Steam' && (!games[i].image_path || games[i].image_path === "")) {
             try {
                 const onlineUrl = await invoke('find_image_online', { title: games[i].title });
-                // Note : le backend renvoie l'URL de l'image verticale. 
-                // On l'utilise pour trouver l'ID Steam.
                 if (onlineUrl && onlineUrl !== "") {
                     games[i].image_path = onlineUrl;
                     const match = onlineUrl.match(/apps\/(\d+)\//);
                     if (match) games[i].steamIdFallback = match[1];
-                    games = [...games]; // Force update Svelte
+                    games = [...games]; 
                 }
             } catch (err) {}
         }
@@ -241,18 +256,13 @@
 
   // --- NOUVELLE LOGIQUE ROBUSTE DE RÉCUPÉRATION D'IMAGE ---
   function getImgSrc(game) {
-    // 1. Image locale ou URL explicite
     if (game.image_path && game.image_path.startsWith('http')) return game.image_path;
     if (game.image_path && game.image_path.trim() !== "") return convertFileSrc(game.image_path);
 
-    // 2. Si c'est un jeu Steam, on tente l'URL Steam directe (verticale)
     if (game.platform === 'Steam') {
         return `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.id}/library_600x900.jpg`;
     }
 
-    // 3. IMPORTANT : Si on n'a pas d'image MAIS qu'on a un ID Fallback (trouvé par le scan),
-    // on renvoie l'image HEADER horizontale immédiatement pour garantir qu'une image s'affiche.
-    // Cela règle le problème des jeux EA/Ubisoft où l'image verticale est introuvable.
     if (game.steamIdFallback) {
          return `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.steamIdFallback}/header.jpg`;
     }
@@ -260,34 +270,25 @@
     return null;
   }
 
-  // --- GESTION D'ERREUR D'IMAGE ---
   function handleImageError(e, game) {
     const img = e.target;
-    
-    // Protection boucle infinie
     if (img.getAttribute('data-fallback-tried') === 'true') {
-        img.style.display = 'none'; // Cache l'image cassée
+        img.style.display = 'none'; 
         const p = img.parentElement;
         const f = p.querySelector('.fallback-icon');
-        if(f) f.style.display = 'flex'; // Affiche l'icône
+        if(f) f.style.display = 'flex'; 
         return;
     }
-
     img.setAttribute('data-fallback-tried', 'true');
-
-    // Trouver l'ID
     let steamId = null;
     if (game.platform === 'Steam') steamId = game.id;
     else if (game.steamIdFallback) steamId = game.steamIdFallback;
 
-    // Si on a un ID, on tente l'image horizontale (Header)
     if (steamId) {
-        // Force l'affichage au cas où il serait caché
         img.style.display = 'block';
         img.src = `https://cdn.cloudflare.steamstatic.com/steam/apps/${steamId}/header.jpg`;
-        img.classList.add('fallback-zoomed'); // Applique le zoom CSS
+        img.classList.add('fallback-zoomed'); 
     } else {
-        // Echec total -> on cache l'image et on laisse l'icône de fond
         img.style.display = 'none';
         const p = img.parentElement;
         const f = p.querySelector('.fallback-icon');
@@ -325,7 +326,7 @@
     <div class="flex items-center justify-between mb-6">
         <div class="flex items-center">
             <div class="w-16 h-16 bg-gradient-to-br from-[#2a2a2a] to-black rounded-2xl flex items-center justify-center mr-5 shadow-2xl ring-1 ring-white/10 p-2">
-                <img src="/icon.png" alt="Logo" class="w-full h-full object-contain drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]" />      
+                <img src="/icon.png" alt="Logo" class="w-full h-full object-contain drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]" />       
             </div>
             <div>
                 <h1 class="text-4xl font-black tracking-wider text-[var(--text-primary)] uppercase mb-1">Geewer Game's Hub</h1>
@@ -335,7 +336,16 @@
             </div>
         </div>
         
-        <div class="flex gap-3">
+        <div class="flex-1 flex justify-center px-4">
+             <AdBanner 
+                link="https://www.instant-gaming.com/?igr=gamer-dc3821"
+                darkThemeImg="/banner_light.png" 
+                lightThemeImg="/banner_dark.png"
+                isDarkTheme={isAppDark}
+             />
+        </div>
+
+        <div class="flex gap-3 items-center">
             <button on:click={toggleLanguage} class="flex items-center justify-center gap-2 border border-white/10 px-3 py-2 rounded-lg bg-[var(--card-bg)] hover:bg-[#333] transition-all hover:scale-105 shadow-md active:scale-95" title={$locale === 'fr' ? 'Switch to English' : 'Passer en Français'}>
                 {#if $locale === 'fr'}
                     <svg class="w-6 h-4 rounded shadow-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><path fill="#EC1920" d="M0 0h3v2H0z"/><path fill="#fff" d="M0 0h2v2H0z"/><path fill="#051440" d="M0 0h1v2H0z"/></svg>
@@ -559,8 +569,8 @@
                                                 ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20 text-white shadow-lg' 
                                                 : 'border-white/10 text-gray-400 group-hover:border-white/30'}`
                                     }>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-2"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7z" /><path fill-rule="evenodd" d="M3 6a1 1 0 011-1h12a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V6zM7 11a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>
-                                        Disque {drive}
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-2"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7z" /><path fill-rule="evenodd" d="M3 6a1 1 0 011-1h12a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V6zM7 11a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>
+                                            Disque {drive}
                                     </span>
                                 </label>
                             {/each}
@@ -640,7 +650,7 @@
                 {:else if settingsTab === 'about'}
                     <div class="flex flex-col items-center justify-center h-full text-center space-y-6 animate-fade-in">
                          <div class="w-24 h-24 bg-gradient-to-br from-[#2a2a2a] to-black rounded-3xl flex items-center justify-center shadow-2xl ring-1 ring-white/10 p-4">
-                            <img src="/icon.png" alt="Logo" class="w-full h-full object-contain" />      
+                            <img src="/icon.png" alt="Logo" class="w-full h-full object-contain" />       
                         </div>
                         <div>
                             <h3 class="text-3xl font-black text-[var(--text-primary)]">Geewer Game's Hub</h3>
