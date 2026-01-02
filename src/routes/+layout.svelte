@@ -5,6 +5,9 @@
   // Import de la configuration i18n pour qu'elle s'initialise au lancement
   import "../lib/i18n.js"; 
   import { isLoading } from 'svelte-i18n';
+  
+  // L'import est bon ici
+  import RatePopup from '../lib/RatePopup.svelte';
 </script>
 
 {#if $isLoading}
@@ -14,4 +17,5 @@
   </div>
 {:else}
   <slot />
+  <RatePopup />
 {/if}

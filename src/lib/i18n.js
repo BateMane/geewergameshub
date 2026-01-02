@@ -90,6 +90,10 @@ register('fr', () => Promise.resolve({
     "no": "Non",
     "yes": "Oui"
   },
+  "rate_popup": {
+    "text": "L'application vous plaît? Notez la sur le Microsoft Store!",
+    "btn": "Noter maintenant"
+  },
   "error": "Erreur"
 }));
 
@@ -182,6 +186,10 @@ register('en', () => Promise.resolve({
     "dont_ask": "Don't ask again",
     "no": "No",
     "yes": "Yes"
+  },
+  "rate_popup": {
+    "text": "Liking your experience? Let us know!",
+    "btn": "Rate now"
   },
   "error": "Error"
 }));

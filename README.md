@@ -34,7 +34,10 @@ L'idée est de rendre la gestion de ta bibliothèque plus agréable :
 
 ### 🛠️ Comment l'installer ou le tester ?
 
-Si tu veux tester le projet ou modifier le code, c'est assez simple. Il te faut juste **Node.js** et **Rust** installés sur ta machine.
+🚀 **Téléchargement facile** : L'application est disponible directement sur le **Microsoft Store** !  
+👉 [**Clique ici pour télécharger Geewer Game's Hub**](https://apps.microsoft.com/detail/9N9CF4NLLQZ7?hl=fr&gl=FR&ocid=pdpshare)
+
+Si tu préfères tester le projet depuis le code source ou le compiler toi-même, il te faut **Node.js** et **Rust** installés sur ta machine.
 
 1.  **Récupère le projet**
     ```bash
@@ -47,12 +50,13 @@ Si tu veux tester le projet ou modifier le code, c'est assez simple. Il te faut 
     npm install
     ```
 
-3.  **Lance l'app**
+3.  **Lance l'app en mode dev**
     ```bash
     npm run tauri dev
     ```
 
-Et voilà, la fenêtre devrait s'ouvrir !
+📦 **Où est l'installateur ?** Si tu lances une compilation complète (via `npm run tauri build`), tu trouveras l'exécutable d'installation généré dans ce dossier :
+`\src-tauri\target\release\bundle`
 
 ### 💻 C'est fait comment ?
 
@@ -84,11 +88,14 @@ The idea is to make managing your library more enjoyable:
 
 ### 🛠️ How to install or test it?
 
-If you want to test the project or modify the code, it's quite simple. You just need **Node.js** and **Rust** installed on your machine.
+🚀 **Easy Download**: The app is available directly on the **Microsoft Store**!  
+👉 [**Click here to download Geewer Game's Hub**](https://apps.microsoft.com/detail/9N9CF4NLLQZ7?hl=fr&gl=FR&ocid=pdpshare)
+
+If you want to test the project from source or compile it yourself, you need **Node.js** and **Rust** installed on your machine.
 
 1.  **Clone the project**
     ```bash
-    git clone [https://github.com/ton-pseudo/geewergameshub.git](https://github.com/ton-pseudo/geewergameshub.git)
+    git clone [https://github.com/ton-pseudo/geewergameshub.git](https://github.com/your-username/geewergameshub.git)
     cd geewergameshub
     ```
 
@@ -97,12 +104,13 @@ If you want to test the project or modify the code, it's quite simple. You just 
     npm install
     ```
 
-3.  **Launch the app**
+3.  **Launch the app in dev mode**
     ```bash
     npm run tauri dev
     ```
 
-And there you go, the window should open!
+📦 **Where is the installer?** If you run a full build (via `npm run tauri build`), you will find the generated installation file in this folder:
+`\src-tauri\target\release\bundle`
 
 ### 💻 How is it made?
 
