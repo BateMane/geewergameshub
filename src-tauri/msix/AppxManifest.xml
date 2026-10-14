@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Manifeste du package Microsoft Store. {{VERSION}} est remplacé par scripts/build-msix.ps1 -->
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10" xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap uap10 desktop rescap">
+  <Identity Name="geewerrr.GeewersGameHub" Publisher="CN=7EB540A4-BCD5-4177-A527-D97004802865" Version="{{VERSION}}" ProcessorArchitecture="x64" />
+  <Properties>
+    <DisplayName>Geewer's Game Hub</DisplayName>
+    <PublisherDisplayName>geewerrr</PublisherDisplayName>
+    <Description>Geewer's Game Hub</Description>
+    <Logo>Assets\StoreLogo.png</Logo>
+    <uap10:PackageIntegrity>
+      <uap10:Content Enforcement="on" />
+    </uap10:PackageIntegrity>
+  </Properties>
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+  <Applications>
+    <Application Id="GAMEHUBWIDGET" Executable="game-hub-widget.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements BackgroundColor="transparent" DisplayName="Geewer's Game Hub" Square150x150Logo="Assets\GAMEHUBWIDGET-Square150x150Logo.png" Square44x44Logo="Assets\GAMEHUBWIDGET-Square44x44Logo.png" Description="Geewer's Game Hub">
+        <uap:DefaultTile Wide310x150Logo="Assets\GAMEHUBWIDGET-Wide310x150Logo.png" Square310x310Logo="Assets\GAMEHUBWIDGET-Square310x310Logo.png" Square71x71Logo="Assets\GAMEHUBWIDGET-Square71x71Logo.png" />
+      </uap:VisualElements>
+      <Extensions>
+        <!-- Désactivée par défaut : l'app demande l'accord de l'utilisateur (popup) puis l'active via set_autostart -->
+        <desktop:Extension Category="windows.startupTask" Executable="game-hub-widget.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="GeewerGameHubStartup" Enabled="false" DisplayName="Geewer's Game Hub" />
+        </desktop:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

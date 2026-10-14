@@ -1,18 +1,32 @@
 <script>
   import { _ } from 'svelte-i18n';
   import { onMount } from 'svelte';
-  import { fade, fly } from 'svelte/transition';
+  import { fly } from 'svelte/transition';
+  import { invoke } from '@tauri-apps/api/core';
 
+  const STORE_URL = 'https://apps.microsoft.com/detail/9N9CF4NLLQZ7?hl=fr&gl=FR&ocid=pdpshare';
   let visible = false;
 
   onMount(() => {
-    // Le popup s'affiche après 2 minutes
-    const timer = setTimeout(() => {
-      visible = true;
-    }, 1000);
+    // Demande seulement à partir du 3e lancement, après 2 minutes, et plus jamais une fois traitée
+    if (localStorage.getItem('rate_popup_done') === 'true') return;
+    const launches = Number(localStorage.getItem('launch_count') || 0) + 1;
+    localStorage.setItem('launch_count', String(launches));
+    if (launches < 3) return;
 
+    const timer = setTimeout(() => { visible = true; }, 2 * 60 * 1000);
     return () => clearTimeout(timer);
   });
+
+  function close() {
+    visible = false;
+    localStorage.setItem('rate_popup_done', 'true');
+  }
+
+  function rate() {
+    invoke('open_launcher_page', { id: STORE_URL, platform: 'Custom' });
+    close();
+  }
 </script>
 
 {#if visible}
@@ -22,7 +36,7 @@
   >
     <button 
       class="absolute top-2 right-2 text-gray-500 hover:text-white transition-colors"
-      on:click={() => visible = false}
+      on:click={close}
       aria-label="Fermer"
     >
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -32,13 +46,11 @@
       {$_('rate_popup.text')}
     </p>
 
-    <a 
-      href="https://apps.microsoft.com/detail/9N9CF4NLLQZ7?hl=fr&gl=FR&ocid=pdpshare"
-      target="_blank"
-      rel="noopener noreferrer"
+    <button
+      on:click={rate}
       class="bg-[var(--accent-color)] hover:brightness-110 text-white text-sm font-bold py-2 px-4 rounded-lg text-center transition-all shadow-lg hover:scale-105"
     >
       {$_('rate_popup.btn')}
-    </a>
+    </button>
   </div>
 {/if}

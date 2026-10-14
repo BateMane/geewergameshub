@@ -10,12 +10,31 @@ register('fr', () => Promise.resolve({
     "view_grid": "Vue Grille",
     "view_list": "Vue Liste",
     "sort_az": "A-Z",
-    "sort_za": "Z-A"
+    "sort_za": "Z-A",
+    "sort_recent": "Récents",
+    "search": "Rechercher un jeu...",
+    "refresh": "Rescanner la bibliothèque (F5)"
   },
   "tabs": {
     "all": "Tout",
     "fav": "Favoris",
-    "custom": "Perso"
+    "custom": "Perso",
+    "hidden": "Masqués"
+  },
+  "recent": {
+    "title": "Reprendre",
+    "library": "Bibliothèque"
+  },
+  "empty": {
+    "no_results": "Aucun jeu ne correspond à ta recherche.",
+    "no_games": "Aucun jeu ici pour l'instant.",
+    "clear_search": "Effacer la recherche"
+  },
+  "toast": {
+    "launching": "Lancement de",
+    "added": "a été ajouté !",
+    "hidden": "Jeu masqué (onglet Masqués pour le retrouver)",
+    "unhidden": "Jeu de nouveau visible"
   },
   "game_card": {
     "play": "JOUER",
@@ -49,7 +68,8 @@ register('fr', () => Promise.resolve({
       "autostart_desc": "Démarrer Geewer GameHub avec le système",
       "drives_title": "Disques à scanner",
       "drives_desc": "Sélectionnez les lecteurs où vos jeux sont installés pour optimiser le scan.",
-      "no_drives": "Aucun disque détecté automatiquement."
+      "no_drives": "Aucun disque détecté automatiquement.",
+      "drive": "Disque"
     },
     "appearance": {
       "presets_title": "Thèmes Prédéfinis",
@@ -81,7 +101,13 @@ register('fr', () => Promise.resolve({
     "play_btn": "LANCER",
     "folder_btn": "DOSSIER",
     "open_btn": "OUVRIR",
-    "no_info": "Aucune information supplémentaire disponible pour ce jeu."
+    "no_info": "Aucune information supplémentaire disponible pour ce jeu.",
+    "last_played": "Joué",
+    "screenshots": "Captures d'écran",
+    "hide": "Masquer de la bibliothèque",
+    "unhide": "Afficher dans la bibliothèque",
+    "remove": "Retirer ce jeu",
+    "remove_confirm": "Retirer ce jeu de la bibliothèque ? (Le jeu lui-même n'est pas désinstallé)"
   },
   "autostart_popup": {
     "title": "Lancer au démarrage ?",
@@ -107,12 +133,31 @@ register('en', () => Promise.resolve({
     "view_grid": "Grid View",
     "view_list": "List View",
     "sort_az": "A-Z",
-    "sort_za": "Z-A"
+    "sort_za": "Z-A",
+    "sort_recent": "Recent",
+    "search": "Search a game...",
+    "refresh": "Rescan library (F5)"
   },
   "tabs": {
     "all": "All",
     "fav": "Favorites",
-    "custom": "Custom"
+    "custom": "Custom",
+    "hidden": "Hidden"
+  },
+  "recent": {
+    "title": "Jump back in",
+    "library": "Library"
+  },
+  "empty": {
+    "no_results": "No game matches your search.",
+    "no_games": "No games here yet.",
+    "clear_search": "Clear search"
+  },
+  "toast": {
+    "launching": "Launching",
+    "added": "has been added!",
+    "hidden": "Game hidden (see the Hidden tab)",
+    "unhidden": "Game visible again"
   },
   "game_card": {
     "play": "PLAY",
@@ -146,7 +191,8 @@ register('en', () => Promise.resolve({
       "autostart_desc": "Start Geewer GameHub with Windows",
       "drives_title": "Drives to scan",
       "drives_desc": "Select drives where your games are installed to optimize scanning.",
-      "no_drives": "No drives detected automatically."
+      "no_drives": "No drives detected automatically.",
+      "drive": "Drive"
     },
     "appearance": {
       "presets_title": "Preset Themes",
@@ -178,7 +224,13 @@ register('en', () => Promise.resolve({
     "play_btn": "PLAY",
     "folder_btn": "FOLDER",
     "open_btn": "OPEN",
-    "no_info": "No additional information available for this game."
+    "no_info": "No additional information available for this game.",
+    "last_played": "Played",
+    "screenshots": "Screenshots",
+    "hide": "Hide from library",
+    "unhide": "Show in library",
+    "remove": "Remove this game",
+    "remove_confirm": "Remove this game from the library? (The game itself is not uninstalled)"
   },
   "autostart_popup": {
     "title": "Launch on startup?",
@@ -188,7 +240,7 @@ register('en', () => Promise.resolve({
     "yes": "Yes"
   },
   "rate_popup": {
-    "text": "Liking your experience? Let us know!",
+    "text": "Enjoying the app? Rate it on the Microsoft Store!",
     "btn": "Rate now"
   },
   "error": "Error"

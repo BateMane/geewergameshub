@@ -1,6 +1,6 @@
-# Geewer Game's Hub 1.0.4
+# Geewer Game's Hub 1.1.0
 
-![Version](https://img.shields.io/badge/version-1.0.4-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.1.0-blue?style=flat-square)
 ![Tauri](https://img.shields.io/badge/Tauri-2.0-orange?style=flat-square&logo=tauri)
 ![Svelte](https://img.shields.io/badge/Svelte-red?style=flat-square&logo=svelte)
 
@@ -31,6 +31,9 @@ L'idée est de rendre la gestion de ta bibliothèque plus agréable :
 * **Infos utiles** : Quand tu cliques sur un jeu, tu vois les infos principales de celui-ci et si des mods sont dispos sur *Nexus Mods* ou *Thunderstore*.
 * **C'est ton interface** : Tu peux changer les couleurs, le fond d'écran et le thème global pour que ça ressemble à ce que tu aimes.
 * **Choix des disques** : Si tu as plusieurs disques durs, tu peux dire à l'app lesquels scanner pour éviter qu'elle cherche partout inutilement.
+* **Visuels HD** : jaquettes 1200×1800, bannières 4K et galerie de captures d'écran, récupérées directement chez Steam (même pour tes jeux Epic, GOG ou EA).
+* **Recherche instantanée** (`Ctrl+F`), tri **A-Z / Z-A / Récents** et rangée **« Reprendre »** avec tes derniers jeux lancés.
+* **Masquer** les jeux ou outils que tu ne veux pas voir, **retirer** un jeu ajouté à la main, **rescanner** sans relancer (`F5`).
 
 ### 🛠️ Comment l'installer ou le tester ?
 
@@ -41,7 +44,7 @@ Si tu préfères tester le projet depuis le code source ou le compiler toi-même
 
 1.  **Récupère le projet**
     ```bash
-    git clone [https://github.com/ton-pseudo/geewergameshub.git](https://github.com/ton-pseudo/geewergameshub.git)
+    git clone https://github.com/BateMane/geewergameshub.git
     cd geewergameshub
     ```
 
@@ -57,6 +60,8 @@ Si tu préfères tester le projet depuis le code source ou le compiler toi-même
 
 📦 **Où est l'installateur ?** Si tu lances une compilation complète (via `npm run tauri build`), tu trouveras l'exécutable d'installation généré dans ce dossier :
 `\src-tauri\target\release\bundle`
+
+🏪 **Package Microsoft Store** : après `npm run tauri build`, lance `powershell -File scripts/build-msix.ps1` (nécessite le Windows SDK). Le `.msix` est généré dans `src-tauri\target\release\bundle\msix`.
 
 ### 💻 C'est fait comment ?
 
@@ -85,6 +90,9 @@ The idea is to make managing your library more enjoyable:
 * **Useful info**: When you click on a game, you see its main information and if mods are available on *Nexus Mods* or *Thunderstore*.
 * **It's your interface**: You can change the colors, the background, and the global theme to make it look the way you like.
 * **Drive selection**: If you have multiple hard drives, you can tell the app which ones to scan to avoid searching everywhere unnecessarily.
+* **HD artwork**: 1200×1800 covers, 4K banners and a screenshot gallery, fetched straight from Steam (even for your Epic, GOG or EA games).
+* **Instant search** (`Ctrl+F`), **A-Z / Z-A / Recent** sorting and a **"Jump back in"** row with your last played games.
+* **Hide** games or tools you don't want to see, **remove** a manually added game, **rescan** without restarting (`F5`).
 
 ### 🛠️ How to install or test it?
 
@@ -95,7 +103,7 @@ If you want to test the project from source or compile it yourself, you need **N
 
 1.  **Clone the project**
     ```bash
-    git clone [https://github.com/ton-pseudo/geewergameshub.git](https://github.com/your-username/geewergameshub.git)
+    git clone https://github.com/BateMane/geewergameshub.git
     cd geewergameshub
     ```
 
@@ -111,6 +119,8 @@ If you want to test the project from source or compile it yourself, you need **N
 
 📦 **Where is the installer?** If you run a full build (via `npm run tauri build`), you will find the generated installation file in this folder:
 `\src-tauri\target\release\bundle`
+
+🏪 **Microsoft Store package**: after `npm run tauri build`, run `powershell -File scripts/build-msix.ps1` (requires the Windows SDK). The `.msix` is written to `src-tauri\target\release\bundle\msix`.
 
 ### 💻 How is it made?
 
