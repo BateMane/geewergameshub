@@ -1,131 +1,136 @@
-# Geewer Game's Hub 1.1.0
-
-![Version](https://img.shields.io/badge/version-1.1.0-blue?style=flat-square)
-![Tauri](https://img.shields.io/badge/Tauri-2.0-orange?style=flat-square&logo=tauri)
-![Svelte](https://img.shields.io/badge/Svelte-red?style=flat-square&logo=svelte)
-
 <div align="center">
 
-**[🇫🇷 Français](#-français)** | **[🇬🇧 English](#-english)**
+<img src="static/icon.png" width="96" alt="Logo Geewer's Game Hub" />
+
+# Geewer's Game Hub
+
+**Tous tes jeux PC. Une seule bibliothèque.**<br>
+*All your PC games. One library.*
+
+[![Microsoft Store](https://img.shields.io/badge/Microsoft_Store-Télécharger-0078D4?style=for-the-badge&logo=microsoft&logoColor=white)](https://apps.microsoft.com/detail/9N9CF4NLLQZ7?hl=fr&gl=FR&ocid=pdpshare)
+
+![Version](https://img.shields.io/badge/version-1.1.0-5865F2?style=flat-square)
+![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4?style=flat-square&logo=windows)
+![Tauri](https://img.shields.io/badge/Tauri-2-FFC131?style=flat-square&logo=tauri&logoColor=black)
+![Svelte](https://img.shields.io/badge/Svelte-5-FF3E00?style=flat-square&logo=svelte&logoColor=white)
+![Rust](https://img.shields.io/badge/Rust-backend-000000?style=flat-square&logo=rust)
+
+**[🇫🇷 Français](#-français)** · **[🇬🇧 English](#-english)**
+
+<img src="docs/library.jpg" alt="Bibliothèque de jeux" width="100%" />
 
 </div>
-
-<img width="1917" height="985" alt="interface" src="https://github.com/user-attachments/assets/0278dc51-3524-4724-95e5-86075219ed86" />
 
 ---
 
 ## 🇫🇷 Français
 
-Salut ! **Geewer Game's Hub**, c'est tout simplement un launcher pour rassembler tous tes jeux au même endroit.
+Marre de jongler entre Steam, Epic, GOG, Ubisoft Connect et l'EA app juste pour retrouver un jeu ?
+**Geewer's Game Hub** scanne ton PC, trouve tous tes jeux installés, peu importe la boutique, et les réunit dans une seule interface, belle et rapide.
 
-J'en avais marre d'ouvrir 4 ou 5 applications différentes (Steam, Epic, Ubisoft...) juste pour retrouver un jeu. Du coup, j'ai créé cette app : elle scanne ton PC, trouve tes jeux installés peu importe la boutique, et te les affiche dans une belle interface unifiée.
+Léger, codé en **Rust avec Tauri**, il ne tourne pas en arrière-plan pour rien.
 
-C'est léger, ça ne tourne pas en fond pour rien, et c'est codé avec **Tauri (Rust)** pour être le plus rapide possible.
+### ✨ Fonctionnalités
 
-### ⚡ Qu'est-ce qu'on peut faire avec ?
+| | |
+|---|---|
+| 🎮 **Détection automatique** | Steam, Epic Games, GOG, Ubisoft Connect et EA app. Les outils et redistribuables sont ignorés |
+| 🖼️ **Visuels HD** | Jaquettes 1200×1800, bannières 4K et captures d'écran, même pour tes jeux hors Steam |
+| 🔎 **Recherche instantanée** | `Ctrl+F`, insensible aux accents |
+| ⏱️ **Reprendre** | Tes derniers jeux lancés en haut de la bibliothèque, tri par jeux récents |
+| ⭐ **Organisation** | Favoris, jeux masqués, ajout manuel de n'importe quel `.exe` (indés, émulateurs…) |
+| 📖 **Fiche de jeu** | Développeur, date de sortie, Metacritic, genres, durée de vie (HowLongToBeat) et mods dispo sur Nexus Mods / Thunderstore |
+| 🎨 **Thèmes** | 8 thèmes prêts à l'emploi ou tes propres couleurs |
+| ⚙️ **Pratique** | Choix des disques à scanner, démarrage avec Windows, rescan avec `F5`, interface FR / EN |
 
-L'idée est de rendre la gestion de ta bibliothèque plus agréable :
+<div align="center">
+<img src="docs/details.jpg" alt="Fiche d'un jeu" width="100%" />
+</div>
 
-* **Tout tes jeux au même endroit** : L'app détecte automatiquement les jeux Steam, Epic Games, GOG, Ubisoft Connect et EA App.
-* **Ajout manuel** : Tu peux aussi ajouter toi-même des jeux qui ne viennent pas de ces boutiques (jeux indés, émulateurs, etc.).
-* **Infos utiles** : Quand tu cliques sur un jeu, tu vois les infos principales de celui-ci et si des mods sont dispos sur *Nexus Mods* ou *Thunderstore*.
-* **C'est ton interface** : Tu peux changer les couleurs, le fond d'écran et le thème global pour que ça ressemble à ce que tu aimes.
-* **Choix des disques** : Si tu as plusieurs disques durs, tu peux dire à l'app lesquels scanner pour éviter qu'elle cherche partout inutilement.
-* **Visuels HD** : jaquettes 1200×1800, bannières 4K et galerie de captures d'écran, récupérées directement chez Steam (même pour tes jeux Epic, GOG ou EA).
-* **Recherche instantanée** (`Ctrl+F`), tri **A-Z / Z-A / Récents** et rangée **« Reprendre »** avec tes derniers jeux lancés.
-* **Masquer** les jeux ou outils que tu ne veux pas voir, **retirer** un jeu ajouté à la main, **rescanner** sans relancer (`F5`).
+### 📥 Installation
 
-### 🛠️ Comment l'installer ou le tester ?
+Le plus simple : **[télécharge-le sur le Microsoft Store](https://apps.microsoft.com/detail/9N9CF4NLLQZ7?hl=fr&gl=FR&ocid=pdpshare)**.
 
-🚀 **Téléchargement facile** : L'application est disponible directement sur le **Microsoft Store** !  
-👉 [**Clique ici pour télécharger Geewer Game's Hub**](https://apps.microsoft.com/detail/9N9CF4NLLQZ7?hl=fr&gl=FR&ocid=pdpshare)
+### 🛠️ Compiler depuis les sources
 
-Si tu préfères tester le projet depuis le code source ou le compiler toi-même, il te faut **Node.js** et **Rust** installés sur ta machine.
+Prérequis : [Node.js](https://nodejs.org) et [Rust](https://rustup.rs).
 
-1.  **Récupère le projet**
-    ```bash
-    git clone https://github.com/BateMane/geewergameshub.git
-    cd geewergameshub
-    ```
+```bash
+git clone https://github.com/BateMane/geewergameshub.git
+cd geewergameshub
+npm install
+npm run tauri dev      # lancer en mode développement
+npm run tauri build    # générer l'installateur .msi
+```
 
-2.  **Installe ce qu'il faut**
-    ```bash
-    npm install
-    ```
+L'installateur est généré dans `src-tauri/target/release/bundle/msi`.
+Pour le package Microsoft Store, lance ensuite `powershell -File scripts/build-msix.ps1` (nécessite le Windows SDK).
 
-3.  **Lance l'app en mode dev**
-    ```bash
-    npm run tauri dev
-    ```
+### 🧱 Stack technique
 
-📦 **Où est l'installateur ?** Si tu lances une compilation complète (via `npm run tauri build`), tu trouveras l'exécutable d'installation généré dans ce dossier :
-`\src-tauri\target\release\bundle`
+- **Interface** : SvelteKit + Tailwind CSS
+- **Backend** : Rust via Tauri 2 (scan des bibliothèques, lancement des jeux, sauvegarde locale)
+- **Données** : API Steam (visuels, fiches), Thunderstore, Nexus Mods, HowLongToBeat
 
-🏪 **Package Microsoft Store** : après `npm run tauri build`, lance `powershell -File scripts/build-msix.ps1` (nécessite le Windows SDK). Le `.msix` est généré dans `src-tauri\target\release\bundle\msix`.
+### 💬 Contribuer
 
-### 💻 C'est fait comment ?
-
-Pour les curieux, voici la stack technique :
-* **Frontend** : SvelteKit + Tailwind CSS (pour que ce soit fluide et joli).
-* **Backend** : Rust via Tauri (pour gérer le système de fichiers, le scan des jeux et les performances).
-
-Si tu as des idées pour améliorer le hub ou si tu trouves un bug, n'hésite pas à ouvrir une *Issue* ou à utiliser le bouton de feedback directement dans les paramètres de l'app !
+Une idée, un bug ? Ouvre une [issue](https://github.com/BateMane/geewergameshub/issues) ou utilise le bouton de feedback dans les paramètres de l'app.
+Si l'app te plaît, une note sur le Store ou un [café](https://buymeacoffee.com/geewerrr) fait toujours plaisir ☕
 
 ---
 
 ## 🇬🇧 English
 
-Hi there! **Geewer Game's Hub** is simply a launcher designed to gather all your games in one place.
+Tired of juggling Steam, Epic, GOG, Ubisoft Connect and the EA app just to find a game?
+**Geewer's Game Hub** scans your PC, finds every installed game whatever the store, and brings them together in one fast, beautiful interface.
 
-I was tired of opening 4 or 5 different applications (Steam, Epic, Ubisoft...) just to find a game. So, I created this app: it scans your PC, finds your installed games regardless of the store, and displays them in a beautiful unified interface.
+Lightweight and built with **Rust and Tauri**, it doesn't sit in the background for nothing.
 
-It's lightweight, doesn't run in the background for no reason, and is coded with **Tauri (Rust)** to be as fast as possible.
+### ✨ Features
 
-### ⚡ What can you do with it?
+| | |
+|---|---|
+| 🎮 **Automatic detection** | Steam, Epic Games, GOG, Ubisoft Connect and EA app. Tools and redistributables are skipped |
+| 🖼️ **HD artwork** | 1200×1800 covers, 4K banners and screenshots, even for non-Steam games |
+| 🔎 **Instant search** | `Ctrl+F`, accent-insensitive |
+| ⏱️ **Jump back in** | Your last played games at the top of the library, sort by recent |
+| ⭐ **Organization** | Favorites, hidden games, add any `.exe` manually (indies, emulators…) |
+| 📖 **Game page** | Developer, release date, Metacritic, genres, time to beat (HowLongToBeat) and available mods on Nexus Mods / Thunderstore |
+| 🎨 **Themes** | 8 ready-made themes or your own colors |
+| ⚙️ **Handy** | Choose which drives to scan, start with Windows, rescan with `F5`, FR / EN interface |
 
-The idea is to make managing your library more enjoyable:
+### 📥 Install
 
-* **All your games in one place**: The app automatically detects Steam, Epic Games, GOG, Ubisoft Connect, and EA App games.
-* **Manual addition**: You can also manually add games that don't come from these stores (indie games, emulators, etc.).
-* **Useful info**: When you click on a game, you see its main information and if mods are available on *Nexus Mods* or *Thunderstore*.
-* **It's your interface**: You can change the colors, the background, and the global theme to make it look the way you like.
-* **Drive selection**: If you have multiple hard drives, you can tell the app which ones to scan to avoid searching everywhere unnecessarily.
-* **HD artwork**: 1200×1800 covers, 4K banners and a screenshot gallery, fetched straight from Steam (even for your Epic, GOG or EA games).
-* **Instant search** (`Ctrl+F`), **A-Z / Z-A / Recent** sorting and a **"Jump back in"** row with your last played games.
-* **Hide** games or tools you don't want to see, **remove** a manually added game, **rescan** without restarting (`F5`).
+The easiest way: **[get it on the Microsoft Store](https://apps.microsoft.com/detail/9N9CF4NLLQZ7?hl=fr&gl=FR&ocid=pdpshare)**.
 
-### 🛠️ How to install or test it?
+### 🛠️ Build from source
 
-🚀 **Easy Download**: The app is available directly on the **Microsoft Store**!  
-👉 [**Click here to download Geewer Game's Hub**](https://apps.microsoft.com/detail/9N9CF4NLLQZ7?hl=fr&gl=FR&ocid=pdpshare)
+Requirements: [Node.js](https://nodejs.org) and [Rust](https://rustup.rs).
 
-If you want to test the project from source or compile it yourself, you need **Node.js** and **Rust** installed on your machine.
+```bash
+git clone https://github.com/BateMane/geewergameshub.git
+cd geewergameshub
+npm install
+npm run tauri dev      # run in development mode
+npm run tauri build    # build the .msi installer
+```
 
-1.  **Clone the project**
-    ```bash
-    git clone https://github.com/BateMane/geewergameshub.git
-    cd geewergameshub
-    ```
+The installer is written to `src-tauri/target/release/bundle/msi`.
+For the Microsoft Store package, then run `powershell -File scripts/build-msix.ps1` (requires the Windows SDK).
 
-2.  **Install dependencies**
-    ```bash
-    npm install
-    ```
+### 🧱 Tech stack
 
-3.  **Launch the app in dev mode**
-    ```bash
-    npm run tauri dev
-    ```
+- **Frontend**: SvelteKit + Tailwind CSS
+- **Backend**: Rust via Tauri 2 (library scanning, game launching, local storage)
+- **Data**: Steam API (artwork, game pages), Thunderstore, Nexus Mods, HowLongToBeat
 
-📦 **Where is the installer?** If you run a full build (via `npm run tauri build`), you will find the generated installation file in this folder:
-`\src-tauri\target\release\bundle`
+### 💬 Contributing
 
-🏪 **Microsoft Store package**: after `npm run tauri build`, run `powershell -File scripts/build-msix.ps1` (requires the Windows SDK). The `.msix` is written to `src-tauri\target\release\bundle\msix`.
+Got an idea or found a bug? Open an [issue](https://github.com/BateMane/geewergameshub/issues) or use the feedback button in the app settings.
+If you like the app, a Store rating or a [coffee](https://buymeacoffee.com/geewerrr) is always appreciated ☕
 
-### 💻 How is it made?
+---
 
-For the curious, here is the tech stack:
-* **Frontend**: SvelteKit + Tailwind CSS (to make it smooth and pretty).
-* **Backend**: Rust via Tauri (to handle the file system, game scanning, and performance).
-
-If you have ideas to improve the hub or if you find a bug, don't hesitate to open an *Issue* or use the feedback button directly in the app settings!
+<div align="center">
+<sub>Made with ❤️ by <b>geewerrr</b></sub>
+</div>
